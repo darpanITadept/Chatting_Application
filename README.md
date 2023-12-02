@@ -1,6 +1,6 @@
 # Chatting Application
 
-![JavaFX Logo](https://upload.wikimedia.org/wikipedia/en/c/c0/JavaFX_Logo.png)
+![JavaFX_Logo](https://github.com/darpanITadept/Chatting_Application/assets/112990024/1b97c300-5073-49ea-a4c7-14700338a5c7)
 
 ## Overview
 
