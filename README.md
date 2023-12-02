@@ -30,7 +30,7 @@ Welcome to the **Chatting Application** – a JavaFX-based program that effortle
 
 4. Multiple clients can join the chat server, and existing clients are notified about new connections.
 
-   ![New Client Notification](screenshots/new_client_notification.png)
+<img width="535" alt="Screenshot 2023-12-01 at 9 18 03 PM" src="https://github.com/darpanITadept/Chatting_Application/assets/112990024/3dd163d2-9bfa-40fd-bbf8-719edac1c38c">
 
 ## Features
 
