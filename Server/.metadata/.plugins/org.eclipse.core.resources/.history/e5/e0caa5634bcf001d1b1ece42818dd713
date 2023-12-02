@@ -1,0 +1,33 @@
+//******************************************************
+//					Workshop 10
+//******************************************************
+//Name:   Darpan Choudhary
+//Class:  JAC444
+//Date:   22th April 2022
+//Section:NBB
+//******************************************************
+
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.*;
+
+public class ChatingAppServer {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		ArrayList<ChatingAppServerThread> serverThreadList = new ArrayList<>();
+		try (ServerSocket serverSocket = new ServerSocket(8000)) {
+			while (true) {
+				Socket socket = serverSocket.accept();
+				ChatingAppServerThread chatingAppServerThread = new ChatingAppServerThread(socket, serverThreadList);
+				serverThreadList.add(chatingAppServerThread);
+				chatingAppServerThread.start();
+			}
+		} catch (IOException e) {
+			System.out.println("Server Exception " + e.getMessage());
+		}
+	}
+
+}

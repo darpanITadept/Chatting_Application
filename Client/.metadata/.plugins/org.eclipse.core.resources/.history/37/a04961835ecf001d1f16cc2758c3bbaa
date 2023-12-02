@@ -1,0 +1,41 @@
+import javafx.application.Platform;
+import javafx.scene.control.TextArea;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+
+public class ClientThread implements Runnable {
+
+    private Socket socket;
+    private BufferedReader input;
+    private TextArea messageBox;
+
+    public ClientThread(Socket socket, TextArea messageBox) throws IOException {
+        this.socket = socket;
+        this.messageBox = messageBox;
+    }
+
+    @Override
+    public void run() {
+        try {
+            this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            while (true) {
+                String response;
+                response = input.readLine();
+                Platform.runLater(() -> {
+                    messageBox.appendText(response + "\n");
+                });
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                input.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}

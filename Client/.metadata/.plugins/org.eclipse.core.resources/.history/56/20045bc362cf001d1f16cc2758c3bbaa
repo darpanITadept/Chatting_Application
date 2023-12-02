@@ -1,0 +1,30 @@
+import javafx.application.Platform;
+
+private class ClientThread implements Runnable {
+        private BufferedReader input;
+
+        public ClientThread(Socket socket) throws IOException {
+            this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    String response = input.readLine();
+                    if (response == null) {
+                        break;
+                    }
+                    Platform.runLater(() -> chatArea.appendText(response + "\n"));
+                }
+            } catch (IOException e) {
+                Platform.runLater(() -> chatArea.appendText("Client Error: " + e.getMessage() + "\n"));
+            } finally {
+                try {
+                    input.close();
+                } catch (Exception e) {
+                    Platform.runLater(() -> chatArea.appendText("Client Error: " + e.getMessage() + "\n"));
+                }
+            }
+        }
+    }

@@ -1,0 +1,63 @@
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+public class ClientThread extends Thread {
+
+    private Socket socket;
+    private ChatingAppClient client;
+    private BufferedReader input;
+    private PrintWriter output;
+
+    public ClientThread(Socket socket, ChatingAppClient client) {
+        this.socket = socket;
+        this.client = client;
+    }
+
+    @Override
+    public void run() {
+        try {
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            output = new PrintWriter(socket.getOutputStream(), true);
+
+            // Prompt for client name
+            String name = "";
+            while (name.trim().isEmpty()) {
+                name = client.promptForName();
+                if (name.trim().isEmpty()) {
+                    client.showAlert("Please enter a valid name", Alert.AlertType.WARNING);
+                }
+            }
+
+            // Send client name to server
+            output.println(name);
+
+            String message;
+            while ((message = input.readLine()) != null) {
+                Platform.runLater(() -> client.displayMessage(message));
+            }
+
+        } catch (IOException e) {
+            Platform.runLater(() -> client.showAlert("Error connecting to server: " + e.getMessage(),
+                    Alert.AlertType.ERROR, ButtonType.OK));
+        } finally {
+            try {
+                input.close();
+                output.close();
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void sendMessage(String message) {
+        output.println(message);
+    }
+}

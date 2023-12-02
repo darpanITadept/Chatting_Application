@@ -1,0 +1,106 @@
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Optional;
+
+public class ChatingAppClient extends Application {
+
+	private Socket socket;
+	private PrintWriter output;
+	private String clientName = "";
+	private ClientThread client;
+	private TextArea chatArea;
+	private TextField inputField = new TextField();
+	private Button sendButton = new Button("Send");
+
+	public static void main(String[] args) {
+		launch(args);
+	}
+
+	@Override
+	public void start(Stage primaryStage) {
+	    BorderPane root = new BorderPane();
+	    VBox chatBox = new VBox(10);
+	    chatBox.setStyle("-fx-padding: 10; -fx-background-color: #FFFFFF;");
+	    chatArea = new TextArea();
+	    chatArea.setEditable(false);
+	    chatArea.setDisable(true);
+	    chatArea.setStyle("-fx-border-color: #AAAAAA;");
+
+	    HBox nameBox = new HBox(10);
+	    TextField nameField = new TextField();
+	    nameField.setPromptText("Enter your name");
+	    Button nameButton = new Button("Submit");
+	    nameButton.setOnAction(e -> {
+	        clientName = nameField.getText().trim();
+	        if (!clientName.isEmpty()) {
+	            nameField.setDisable(true);
+	            nameButton.setDisable(true);
+	            chatArea.setDisable(false);
+	            inputField.setDisable(false);
+	            sendButton.setDisable(false);
+	            output.println(clientName + " Joined the chat");
+	        }
+	    });
+
+	    nameBox.getChildren().addAll(nameField, nameButton);
+	    nameBox.setAlignment(Pos.CENTER);
+
+	    HBox inputBox = new HBox(10);
+	    TextField inputField = new TextField();
+	    inputField.setPromptText("Enter your message");
+	    inputField.setDisable(true);
+	    Button sendButton = new Button("Send");
+	    sendButton.setDisable(true);
+
+	    sendButton.setOnAction(e -> {
+	        handleInput(inputField);
+	    });
+
+	    inputField.setOnAction(e -> {
+	        handleInput(inputField);
+	    });
+
+	    inputBox.getChildren().addAll(inputField, sendButton);
+	    inputBox.setAlignment(Pos.CENTER);
+
+	    chatBox.getChildren().addAll(nameBox, chatArea, inputBox);
+	    root.setCenter(chatBox);
+
+	    Scene scene = new Scene(root, 600, 400);
+
+	    primaryStage.setTitle("Chat Client");
+	    primaryStage.setScene(scene);
+	    primaryStage.show();
+
+	    try {
+	        socket = new Socket("localhost", 8000);
+	        output = new PrintWriter(socket.getOutputStream(), true);
+	        client = new ClientThread(socket, this);
+	        new Thread(client).start();
+	    } catch (IOException e) {
+	        System.out.println("Client Error: " + e.getMessage());
+	    }
+	}
+
+	
+
+	private void handleInput(TextField inputField) {
+		String inputVal = inputField.getText();
+		if (!inputVal.isEmpty()) {
+			output.println(clientName + ": " + inputVal);
+			inputField.clear();
+		}
+	}
+
+	public void displayMessage(String message) {
+		chatArea.appendText(message + "\n");
+	}
+}

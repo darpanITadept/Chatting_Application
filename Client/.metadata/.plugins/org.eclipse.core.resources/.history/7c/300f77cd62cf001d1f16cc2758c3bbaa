@@ -1,0 +1,45 @@
+import javafx.application.Platform;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+public class ClientThread implements Runnable {
+        private BufferedReader input;
+
+        public ClientThread(Socket socket) throws IOException {
+            this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    String response = input.readLine();
+                    if (response == null) {
+                        break;
+                    }
+                    Platform.runLater(() -> chatArea.appendText(response + "\n"));
+                }
+            } catch (IOException e) {
+                Platform.runLater(() -> chatArea.appendText("Client Error: " + e.getMessage() + "\n"));
+            } finally {
+                try {
+                    input.close();
+                } catch (Exception e) {
+                    Platform.runLater(() -> chatArea.appendText("Client Error: " + e.getMessage() + "\n"));
+                }
+            }
+        }
+    }

@@ -1,0 +1,56 @@
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+
+public class ChatingAppServer extends Application {
+
+    private TextArea logTextArea;
+    private ArrayList<ChatingAppServerThread> serverThreadList;
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        logTextArea = new TextArea();
+        logTextArea.setEditable(false);
+        logTextArea.setWrapText(true);
+
+        VBox root = new VBox(logTextArea);
+        root.setSpacing(10);
+        root.setFillWidth(true);
+        root.setPrefSize(600, 400);
+
+        Scene scene = new Scene(root);
+        primaryStage.setTitle("Chat Server");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        serverThreadList = new ArrayList<>();
+
+        new Thread(() -> {
+            try (ServerSocket serverSocket = new ServerSocket(8000)) {
+                while (true) {
+                    Socket socket = serverSocket.accept();
+                    ChatingAppServerThread chatingAppServerThread = new ChatingAppServerThread(socket, serverThreadList, logTextArea);
+                    serverThreadList.add(chatingAppServerThread);
+                    chatingAppServerThread.start();
+                }
+            } catch (IOException e) {
+                logMessage("Server Exception " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void logMessage(String message) {
+        logTextArea.appendText(message + "\n");
+    }
+}

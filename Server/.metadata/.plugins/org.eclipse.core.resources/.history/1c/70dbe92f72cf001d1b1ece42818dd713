@@ -1,0 +1,70 @@
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
+import java.time.ZonedDateTime;
+
+public class ChatingAppServer extends Application {
+
+//	Class Attributes
+//	----------------
+	private TextArea logTextArea;
+	private ArrayList<ChatingAppServerThread> serverThreadList;
+
+	@Override
+	public void start(Stage primaryStage) {
+//    	Configuring the TextArea attribute
+//    	----------------------------------
+		logTextArea = new TextArea();
+		logTextArea.setEditable(false);
+		logTextArea.setWrapText(true);
+
+//      Setting the Root Pane of the Application
+//		----------------------------------------
+		VBox root = new VBox(logTextArea);
+		root.setSpacing(10);
+		root.setFillWidth(true);
+		root.setPrefSize(600, 200);
+		
+//		Setting up the Scene
+//		--------------------
+		Scene scene = new Scene(root);
+		primaryStage.setTitle("Server");
+		primaryStage.setScene(scene);
+		primaryStage.show();
+
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEEE MMMM dd HH:mm:ss z yyyy");
+		ZonedDateTime now = ZonedDateTime.now();
+		logMessage("Multithread Server started at " + dtf.format(now));
+
+		serverThreadList = new ArrayList<>();
+
+		new Thread(() -> {
+			try (ServerSocket serverSocket = new ServerSocket(8000)) {
+				while (true) {
+					Socket socket = serverSocket.accept();
+					ChatingAppServerThread chatingAppServerThread = new ChatingAppServerThread(socket, serverThreadList,
+							logTextArea);
+					serverThreadList.add(chatingAppServerThread);
+					chatingAppServerThread.start();
+				}
+			} catch (IOException e) {
+				logMessage("Server Exception " + e.getMessage());
+			}
+		}).start();
+	}
+
+	private void logMessage(String message) {
+		logTextArea.appendText(message + "\n");
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
+}

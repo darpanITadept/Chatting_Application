@@ -1,0 +1,47 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.function.Consumer;
+
+public class ClientThread extends Thread {
+
+	private final Socket socket;
+	private final Consumer<String> onMessageReceived;
+
+	public ClientThread(Socket socket, Consumer<String> onMessageReceived) {
+		this.socket = socket;
+		this.onMessageReceived = onMessageReceived;
+	}
+
+	@Override
+    public void run() {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+            while (true) {
+                String received = new PrintWriter(socket.getOutputStream(), true);
+ // Read messages from the server and display them in the chat area
+        while (in.hasNextLine()) {
+            String message = in.nextLine();
+            client.displayMessage(message);
+        }
+    } catch (IOException e) {
+        System.out.println("Error in ClientThread: " + e.getMessage());
+    } finally {
+        // Close the socket, input and output streams when the thread is finished
+        try {
+            out.close();
+            in.close();
+            socket.close();
+        } catch (IOException e) {
+            System.out.println("Error closing socket in ClientThread: " + e.getMessage());
+        }
+    }
+}
+
+// Send a message to the server
+	public void sendMessage(String message) {
+		out.println(message);
+	}
+}
