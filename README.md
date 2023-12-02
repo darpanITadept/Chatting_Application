@@ -32,6 +32,14 @@ Welcome to the **Chatting Application** – a JavaFX-based program that effortle
 
 <img width="535" alt="Screenshot 2023-12-01 at 9 18 03 PM" src="https://github.com/darpanITadept/Chatting_Application/assets/112990024/3dd163d2-9bfa-40fd-bbf8-719edac1c38c">
 
+5. Server Updating as New User Joins the Chat.
+
+
+
+6. Clients Communicating.
+
+7. Chats are also presented on the Server.
+
 ## Features
 
 - **Dynamic Username:** Users can input their username, and the application dynamically updates the stage title with the entered username.
