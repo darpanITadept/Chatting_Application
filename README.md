@@ -20,7 +20,7 @@ Welcome to the **Chatting Application** – a JavaFX-based program that effortle
 1. After starting the server, launch the client application by running `ChattingAppClient.java`.
 2. The client GUI will prompt for a username initially, with other nodes disabled until a username is provided.
 
-   ![Client Initial GUI](screenshots/client_initial_gui.png)
+<img width="250" alt="Screenshot 2023-12-01 at 9 10 28 PM" src="https://github.com/darpanITadept/Chatting_Application/assets/112990024/c46cb3fe-1521-40ee-b354-1f09b333fdac">
 
 3. Upon submitting a username, the client GUI activates, and a notification is sent to the server about the new connection.
 
