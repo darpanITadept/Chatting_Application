@@ -38,6 +38,8 @@ Welcome to the **Chatting Application** – a JavaFX-based program that effortle
 
 6. Clients Communicating.
 
+<img width="437" alt="Screenshot 2023-12-01 at 9 18 20 PM" src="https://github.com/darpanITadept/Chatting_Application/assets/112990024/7f9d6ea6-963c-458e-ae0c-dfcb54c41fe2">
+
 7. Chats are also presented on the Server.
 
 ## Features
