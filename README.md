@@ -25,6 +25,8 @@ Welcome to the **Chatting Application** – a JavaFX-based program that effortle
 
 3. Upon submitting a username, the client GUI activates, and a notification is sent to the server about the new connection.
 
+<img width="472" alt="Screenshot 2023-12-01 at 9 16 02 PM" src="https://github.com/darpanITadept/Chatting_Application/assets/112990024/9d515d93-41fa-458b-8552-7023bc708d85">
+
 
 4. Multiple clients can join the chat server, and existing clients are notified about new connections.
 
