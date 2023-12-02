@@ -13,7 +13,7 @@ Welcome to the **Chatting Application** – a JavaFX-based program that effortle
 1. Run the server by executing `ChattingAppServer.java`.
 2. The server GUI will display comprehensive system information, including the day, time, month, date, time zone, and year.
 
-   ![Server GUI](screenshots/server_gui.png)
+![Picture 1](https://github.com/darpanITadept/Chatting_Application/assets/112990024/5d73d8f0-c093-4f57-814e-3b3252fc220e)
 
 ### Client Side:
 
