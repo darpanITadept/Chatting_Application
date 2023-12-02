@@ -34,7 +34,7 @@ Welcome to the **Chatting Application** – a JavaFX-based program that effortle
 
 5. Server Updating as New User Joins the Chat.
 
-
+<img width="475" alt="Screenshot 2023-12-01 at 9 25 44 PM" src="https://github.com/darpanITadept/Chatting_Application/assets/112990024/c042c85d-7648-4d91-917d-e531cc686ac2">
 
 6. Clients Communicating.
 
